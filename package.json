@@ -30,8 +30,11 @@
     "envalid": "^7.3.1",
     "koa": "^2.13.4",
     "koa-static": "^5.0.0",
+    "pg": "^8.7.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.6"
   },
   "devDependencies": {
     "@types/jest": "^28.1.3",
