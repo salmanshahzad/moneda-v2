@@ -1,5 +1,7 @@
+.env
 .parcel-cache
 client/dist
 coverage
+db-data
 node_modules
 server/dist
