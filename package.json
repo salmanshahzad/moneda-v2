@@ -26,6 +26,8 @@
   "private": true,
   "dependencies": {
     "@koa/router": "^10.1.1",
+    "dotenv": "^16.0.1",
+    "envalid": "^7.3.1",
     "koa": "^2.13.4",
     "koa-static": "^5.0.0",
     "react": "^18.2.0",
