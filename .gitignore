@@ -1,4 +1,5 @@
 .env
+*.log
 .parcel-cache
 client/dist
 coverage
