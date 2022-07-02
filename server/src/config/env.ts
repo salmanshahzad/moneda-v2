@@ -12,6 +12,7 @@ const env = cleanEnv(process.env, {
   DB_PORT: port(),
   DB_USER: str(),
   PORT: port(),
+  SESSION_SECRET: str(),
 });
 
 export default env;
