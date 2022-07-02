@@ -15,7 +15,7 @@ async function start(): Promise<void> {
     process.once("SIGINT", () => shutdown(server));
     process.once("SIGTERM", () => shutdown(server));
   } catch (err) {
-    logger.error("Error starting server", err);
+    logger.error(`Error starting server: ${(err as Error).stack}`);
     process.exit(1);
   }
 }
@@ -27,7 +27,7 @@ async function shutdown(server: Server): Promise<void> {
     await db.destroy();
     logger.info("Shut down server");
   } catch (err) {
-    logger.error("Error shutting down server", err);
+    logger.error(`Error shutting down server: ${(err as Error).stack}`);
     process.exit(1);
   }
 }
