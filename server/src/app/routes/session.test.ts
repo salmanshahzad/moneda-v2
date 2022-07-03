@@ -2,7 +2,6 @@ import argon2 from "argon2";
 import request from "supertest";
 
 import app from "../../config/app";
-import db from "../../config/db";
 import User from "../models/user";
 
 const ENDPOINT = "/api/session";
@@ -12,8 +11,6 @@ describe("POST", () => {
   const password = "password";
 
   beforeAll(async () => {
-    await db.initialize();
-    await User.clear();
     await User.create({
       username,
       password: await argon2.hash(password),
@@ -51,10 +48,6 @@ describe("POST", () => {
     });
     expect(response.statusCode).toBe(200);
     expect(response.headers["set-cookie"]).toBeDefined();
-  });
-
-  afterAll(async () => {
-    await db.destroy();
   });
 });
 
