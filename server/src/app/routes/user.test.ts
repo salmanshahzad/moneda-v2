@@ -6,6 +6,22 @@ import User from "../models/user";
 
 const ENDPOINT = "/api/user";
 
+describe("GET", () => {
+  beforeAll(async () => {
+    await db.initialize();
+    await User.clear();
+  });
+
+  it("returns 401 if a user is not signed in", async () => {
+    const response = await request(app.callback()).get(ENDPOINT);
+    expect(response.statusCode).toBe(401);
+  });
+
+  afterAll(async () => {
+    await db.destroy();
+  });
+});
+
 describe("POST", () => {
   beforeAll(async () => {
     await db.initialize();

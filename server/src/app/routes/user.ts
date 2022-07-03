@@ -8,6 +8,15 @@ import Joi from "../utils/Joi";
 
 const router = new Router({ prefix: "/user" });
 
+router.get("/", async (ctx) => {
+  const user = await User.findOneBy({ id: ctx.session!["userId"] });
+  if (user) {
+    ctx.body = { user };
+  } else {
+    ctx.status = 401;
+  }
+});
+
 router.post("/", async (ctx) => {
   const schema = Joi.object({
     username: Joi.string().required(),
