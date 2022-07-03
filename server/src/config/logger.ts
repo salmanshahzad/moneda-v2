@@ -10,10 +10,12 @@ const customFormat = printf(({ level, message, timestamp }) => {
 const logger = createLogger({
   format: combine(timestamp(), customFormat),
   transports: [
-    new Console(),
+    new Console({
+      level: "http",
+    }),
     new File({
       filename: "combined.log",
-      level: "info",
+      level: "http",
     }),
     new File({
       filename: "errors.log",

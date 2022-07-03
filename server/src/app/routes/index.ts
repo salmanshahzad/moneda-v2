@@ -8,6 +8,11 @@ import userRouter from "./user";
 const router = new Router({ prefix: "/api" });
 
 router.use(async (ctx, next) => {
+  await next();
+  logger.http(`${ctx.method} ${ctx.path} ${ctx.status}`);
+});
+
+router.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
