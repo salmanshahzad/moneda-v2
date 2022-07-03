@@ -1,5 +1,4 @@
-.env
-.env.test
+.env*
 *.log
 .parcel-cache
 client/dist
