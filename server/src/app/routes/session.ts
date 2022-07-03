@@ -45,4 +45,9 @@ router.post("/", async (ctx) => {
   }
 });
 
+router.delete("/", (ctx) => {
+  ctx.status = 204;
+  ctx.session = null;
+});
+
 export default router;

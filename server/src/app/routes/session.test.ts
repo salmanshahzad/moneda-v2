@@ -57,3 +57,11 @@ describe("POST", () => {
     await db.destroy();
   });
 });
+
+describe("DELETE", () => {
+  it("returns 204", async () => {
+    const response = await request(app.callback()).delete(ENDPOINT);
+    expect(response.statusCode).toBe(204);
+    expect(response.headers["set-cookie"]).toBeDefined();
+  });
+});
