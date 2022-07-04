@@ -1,5 +1,6 @@
 import path from "path";
 
+import cors from "@koa/cors";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import serve from "koa-static";
@@ -13,6 +14,7 @@ const app = new Koa();
 app.keys = [env.SESSION_SECRET];
 
 app.use(bodyParser());
+app.use(cors());
 app.use(session(app));
 app.use(router.routes());
 app.use(router.allowedMethods());
