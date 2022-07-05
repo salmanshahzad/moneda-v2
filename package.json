@@ -15,9 +15,9 @@
     "format:client": "prettier --write \"client/src/**/*\"",
     "format:server": "prettier --write \"server/src/**/*\"",
     "start": "node server/dist/index.js",
-    "test": "jest --coverage",
-    "test:client": "jest --coverage client",
-    "test:server": "jest --coverage server"
+    "test": "run-s test:client test:server",
+    "test:client": "jest --config client/jest.config.ts client",
+    "test:server": "jest --config server/jest.config.ts server"
   },
   "author": "Salman Shahzad (https://www.salmanshahzad.com)",
   "homepage": "https://moneda.salmanshahzad.com",
@@ -58,6 +58,7 @@
     "@types/react-dom": "^18.0.5",
     "@types/supertest": "^2.0.12",
     "jest": "^28.1.1",
+    "jest-environment-jsdom": "^28.1.2",
     "nodemon": "^2.0.18",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.6.2",

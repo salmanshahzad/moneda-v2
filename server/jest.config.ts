@@ -1,8 +1,9 @@
 import type { Config } from "@jest/types";
 
 const config: Config.InitialOptions = {
+  collectCoverage: true,
   preset: "ts-jest",
-  setupFilesAfterEnv: ["<rootDir>/server/src/config/jestSetup.ts"],
+  setupFilesAfterEnv: ["./src/config/jestSetup.ts"],
   testEnvironment: "node",
 };
 
