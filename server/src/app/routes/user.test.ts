@@ -1,6 +1,7 @@
 import request from "supertest";
 
 import app from "../../config/app";
+import User from "../models/user";
 
 const ENDPOINT = "/api/user";
 
@@ -21,23 +22,38 @@ describe("POST", () => {
   });
 
   it("returns 201 if the request body is valid", async () => {
+    const username = "usertest";
+    const password = "password";
+
     const response = await request(app.callback()).post(ENDPOINT).send({
-      username: "username",
-      password: "password",
-      confirmPassword: "password",
+      username,
+      password,
+      confirmPassword: password,
     });
     expect(response.statusCode).toBe(201);
     expect(response.headers["set-cookie"]).toBeDefined();
     expect(response.body.user).toBeDefined();
+
+    await User.delete({ username });
   });
 
   it("returns 422 if the username already exists", async () => {
+    const username = "usertest";
+    const password = "password";
+
+    await User.create({
+      username,
+      password,
+    }).save();
+
     const response = await request(app.callback()).post(ENDPOINT).send({
-      username: "username",
-      password: "password",
-      confirmPassword: "password",
+      username,
+      password,
+      confirmPassword: password,
     });
     expect(response.statusCode).toBe(422);
     expect(response.body.errors).toBeDefined();
+
+    await User.delete({ username });
   });
 });

@@ -17,7 +17,7 @@ describe("POST", () => {
     }).save();
   });
 
-  it("returns 401 if the credentials are not sent", async () => {
+  it("returns 422 if the credentials are not sent", async () => {
     const response = await request(app.callback()).post(ENDPOINT);
     expect(response.statusCode).toBe(422);
     expect(response.body.errors).toBeDefined();
@@ -48,6 +48,10 @@ describe("POST", () => {
     });
     expect(response.statusCode).toBe(200);
     expect(response.headers["set-cookie"]).toBeDefined();
+  });
+
+  afterAll(async () => {
+    await User.delete({ username });
   });
 });
 

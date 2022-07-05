@@ -12,7 +12,7 @@ const dataSource = new DataSource({
   password: env.DB_PASSWORD,
   database: env.DB_NAME,
   synchronize: !env.isProd,
-  logging: true,
+  logging: env.isDev,
   entities: [path.join(__dirname, "..", "app", "models", "*.{js,ts}")],
 });
 
