@@ -27,7 +27,7 @@ router.post("/", async (ctx) => {
   const schema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().required(),
-    confirmPassword: Joi.ref("password"),
+    confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
   });
   const { error, value } = schema.validate(ctx.request.body);
   if (error) {

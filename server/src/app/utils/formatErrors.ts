@@ -13,6 +13,8 @@ function formatErrors({ details }: ValidationError): Error[] {
     let message = "";
 
     switch (detail.type) {
+      case "any.only":
+        break;
       case "any.required":
       case "string.empty":
         message = `${key} is required`;
@@ -22,6 +24,10 @@ function formatErrors({ details }: ValidationError): Error[] {
         break;
       default:
         logger.warn(`Unhandled error type: ${detail.type}`);
+    }
+
+    if (key === "confirmPassword" && detail.type === "any.only") {
+      message = "Passwords do not match";
     }
 
     return { key, message };

@@ -34,4 +34,19 @@ describe("formatErrors", () => {
     expect(errors[0]?.key).toBe("foo");
     expect(errors[0]?.message).toBe("foo must be a string");
   });
+
+  it("handles a special case for confirmPassword", () => {
+    const schema = Joi.object({
+      password: Joi.string().required(),
+      confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
+    });
+
+    const { error } = schema.validate({
+      password: "foo",
+      confirmPassword: "bar",
+    });
+    const errors = formatErrors(error!);
+    expect(errors[0]?.key).toBe("confirmPassword");
+    expect(errors[0]?.message).toBe("Passwords do not match");
+  });
 });
