@@ -9,7 +9,13 @@ import Joi from "../utils/Joi";
 const router = new Router({ prefix: "/user" });
 
 router.get("/", async (ctx) => {
-  const user = await User.findOneBy({ id: ctx.session!["userId"] });
+  const userId = ctx.session!["userId"];
+  if (typeof userId !== "number") {
+    ctx.status = 401;
+    return;
+  }
+
+  const user = await User.findOneBy({ id: userId });
   if (user) {
     ctx.body = { user };
   } else {
