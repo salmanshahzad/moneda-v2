@@ -25,6 +25,10 @@ router.post("/", async (ctx) => {
         key: "username",
         message: "username and/or password are incorrect",
       },
+      {
+        key: "password",
+        message: "username and/or password are incorrect",
+      },
     ],
   };
 
