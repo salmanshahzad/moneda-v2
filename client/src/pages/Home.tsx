@@ -9,8 +9,39 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
+
+import api from "../api";
+import SignInModal, { SignInFields } from "../components/auth/SignInModal";
+import SignUpModal, { SignUpFields } from "../components/auth/SignUpModal";
 
 function Home(): JSX.Element {
+  const [isSignInModalOpen, signInModalHandlers] = useDisclosure(false);
+  const [signInErrors, setSignInErrors] = useState<Partial<SignInFields>>({});
+  const [isSignUpModalOpen, signUpModalHandlers] = useDisclosure(false);
+  const [signUpErrors, setSignUpErrors] = useState<Partial<SignUpFields>>({});
+
+  async function signIn(values: SignInFields): Promise<void> {
+    setSignInErrors({});
+    const { data, status } = await api.post("session", values);
+    if (status === 200) {
+      signInModalHandlers.close();
+    } else if (status === 401 || status === 422) {
+      setSignInErrors(api.extractErrorMessages(data));
+    }
+  }
+
+  async function signUp(values: SignUpFields): Promise<void> {
+    setSignUpErrors({});
+    const { data, status } = await api.post("user", values);
+    if (status === 201) {
+      signUpModalHandlers.close();
+    } else if (status === 422) {
+      setSignUpErrors(api.extractErrorMessages(data));
+    }
+  }
+
   return (
     <Container>
       <Grid align="center">
@@ -21,8 +52,10 @@ function Home(): JSX.Element {
               Take control of your finances
             </Text>
             <Group>
-              <Button variant="outline">Sign In</Button>
-              <Button>Sign Up</Button>
+              <Button variant="outline" onClick={signInModalHandlers.open}>
+                Sign In
+              </Button>
+              <Button onClick={signUpModalHandlers.open}>Sign Up</Button>
             </Group>
           </Stack>
         </Grid.Col>
@@ -49,6 +82,18 @@ function Home(): JSX.Element {
           Salman Shahzad
         </Anchor>
       </Text>
+      <SignInModal
+        isOpen={isSignInModalOpen}
+        onClose={signInModalHandlers.close}
+        errors={signInErrors}
+        onSignIn={signIn}
+      />
+      <SignUpModal
+        isOpen={isSignUpModalOpen}
+        onClose={signUpModalHandlers.close}
+        errors={signUpErrors}
+        onSignUp={signUp}
+      />
     </Container>
   );
 }
