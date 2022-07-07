@@ -6,6 +6,11 @@ export interface APIResponse {
   data: unknown;
 }
 
+export interface APIError {
+  key: string;
+  message: string;
+}
+
 const api = {
   async head(endpoint: string): Promise<APIResponse> {
     return await _fetch(endpoint, "HEAD");
@@ -24,6 +29,16 @@ const api = {
   },
   async delete(endpoint: string, data?: unknown): Promise<APIResponse> {
     return await _fetch(endpoint, "DELETE", data);
+  },
+  extractErrorMessages(data: unknown): Record<string, string> {
+    const { errors } = data as { errors: APIError[] };
+    return errors.reduce(
+      (errors, error) => ({
+        ...errors,
+        [error.key]: error.message,
+      }),
+      {}
+    );
   },
 };
 

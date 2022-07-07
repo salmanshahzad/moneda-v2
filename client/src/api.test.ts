@@ -1,4 +1,4 @@
-import api, { APIResponse, Method } from "./api";
+import api, { APIError, APIResponse, Method } from "./api";
 
 describe("api", () => {
   const endpoint = "foo";
@@ -61,5 +61,17 @@ describe("api", () => {
         }
       }
     }
+  });
+
+  it("extracts error messages", () => {
+    const errors: APIError[] = [
+      {
+        key: "foo",
+        message: "bar",
+      },
+    ];
+    expect(api.extractErrorMessages({ errors })).toEqual({
+      foo: "bar",
+    });
   });
 });
