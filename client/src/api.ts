@@ -50,6 +50,7 @@ async function _fetch(
   const request: RequestInit = {
     method,
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
   };
   if (typeof data !== "undefined") {
     request.body = JSON.stringify(data);

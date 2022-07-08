@@ -14,7 +14,7 @@ const app = new Koa();
 app.keys = [env.SESSION_SECRET];
 
 app.use(bodyParser());
-app.use(cors());
+app.use(cors({ credentials: true }));
 app.use(session(app));
 app.use(router.routes());
 app.use(router.allowedMethods());
