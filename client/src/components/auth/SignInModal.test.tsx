@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import SignInModal from "./SignInModal";
 
@@ -23,7 +24,7 @@ describe("SignInModal", () => {
     }
   });
 
-  it.skip("submits form values", () => {
+  it("submits form values", async () => {
     const username = "username";
     const password = "password";
     const onSignIn = jest.fn();
@@ -37,16 +38,23 @@ describe("SignInModal", () => {
       />
     );
 
-    // FIXME: RTL cannot find label
-    const usernameInput = screen.getByLabelText("Username");
-    fireEvent.change(usernameInput, { target: { value: username } });
+    const usernameInputId = screen.getByText("Username").getAttribute("for");
+    const usernameInput = document.getElementById(usernameInputId!);
+    await userEvent.type(usernameInput!, username);
 
-    const passwordInput = screen.getByLabelText("Password");
-    fireEvent.change(passwordInput, { target: { value: password } });
+    const passwordInputId = screen.getByText("Password").getAttribute("for");
+    const passwordInput = document.getElementById(passwordInputId!);
+    await userEvent.type(passwordInput!, password);
 
-    const signInButton = screen.getByRole("button", { name: "Sign In" });
-    fireEvent.click(signInButton);
+    const signInButton = screen.getAllByText("Sign In")[1];
+    await userEvent.click(signInButton!);
 
-    expect(onSignIn).toHaveBeenCalledWith({ username, password });
+    expect(onSignIn).toHaveBeenCalledWith(
+      {
+        username,
+        password,
+      },
+      expect.anything()
+    );
   });
 });

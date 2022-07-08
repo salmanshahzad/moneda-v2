@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import SignUpModal from "./SignUpModal";
 
@@ -24,7 +25,7 @@ describe("SignUpModal", () => {
     }
   });
 
-  it.skip("submits form values", () => {
+  it("submits form values", async () => {
     const username = "username";
     const password = "password";
     const confirmPassword = "confirmPassword";
@@ -39,25 +40,32 @@ describe("SignUpModal", () => {
       />
     );
 
-    // FIXME: RTL cannot find label
-    const usernameInput = screen.getByLabelText("Username");
-    fireEvent.change(usernameInput, { target: { value: username } });
+    const usernameInputId = screen.getByText("Username").getAttribute("for");
+    const usernameInput = document.getElementById(usernameInputId!);
+    await userEvent.type(usernameInput!, username);
 
-    const passwordInput = screen.getByLabelText("Password");
-    fireEvent.change(passwordInput, { target: { value: password } });
+    const passwordInputId = screen.getByText("Password").getAttribute("for");
+    const passwordInput = document.getElementById(passwordInputId!);
+    await userEvent.type(passwordInput!, password);
 
-    const confirmPasswordInput = screen.getByLabelText("Confirm Password");
-    fireEvent.change(confirmPasswordInput, {
-      target: { value: confirmPassword },
-    });
+    const confirmPasswordInputId = screen
+      .getByText("Confirm Password")
+      .getAttribute("for")!;
+    const confirmPasswordInput = document.getElementById(
+      confirmPasswordInputId
+    )!;
+    await userEvent.type(confirmPasswordInput, confirmPassword);
 
-    const signUpButton = screen.getByRole("button", { name: "Sign Up" });
-    fireEvent.click(signUpButton);
+    const signUpButton = screen.getAllByText("Sign Up")[1];
+    await userEvent.click(signUpButton!);
 
-    expect(onSignUp).toHaveBeenCalledWith({
-      username,
-      password,
-      confirmPassword,
-    });
+    expect(onSignUp).toHaveBeenCalledWith(
+      {
+        username,
+        password,
+        confirmPassword,
+      },
+      expect.anything()
+    );
   });
 });
