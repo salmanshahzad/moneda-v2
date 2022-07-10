@@ -1,15 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 
 import Home from "./Home";
 
 describe("Home", () => {
   it("displays the sign in modal", async () => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Home />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     expect(screen.queryByText("Username")).not.toBeInTheDocument();
@@ -20,9 +20,9 @@ describe("Home", () => {
 
   it("displays the sign up modal", async () => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Home />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     expect(screen.queryByText("Username")).not.toBeInTheDocument();
