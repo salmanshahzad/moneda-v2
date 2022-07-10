@@ -48,6 +48,7 @@ describe("POST", () => {
     });
     expect(response.statusCode).toBe(200);
     expect(response.headers["set-cookie"]).toBeDefined();
+    expect(response.body.user).toBeDefined();
   });
 
   afterAll(async () => {

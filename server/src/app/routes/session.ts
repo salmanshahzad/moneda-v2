@@ -41,7 +41,7 @@ router.post("/", async (ctx) => {
   }
 
   if (await argon2.verify(user.password, password)) {
-    ctx.status = 200;
+    ctx.body = { user };
     ctx.session!["userId"] = user.id;
   } else {
     ctx.status = 401;
