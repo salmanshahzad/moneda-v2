@@ -46,6 +46,7 @@ describe("api", () => {
         const request: RequestInit = {
           method,
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         };
         if (!["HEAD", "GET"].includes(method)) {
           request.body = JSON.stringify(data);
