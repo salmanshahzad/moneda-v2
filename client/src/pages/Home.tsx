@@ -15,6 +15,7 @@ import { useState } from "react";
 import api from "../api";
 import SignInModal, { SignInFields } from "../components/auth/SignInModal";
 import SignUpModal, { SignUpFields } from "../components/auth/SignUpModal";
+import useStore, { User } from "../store";
 
 function Home(): JSX.Element {
   const [isSignInModalOpen, signInModalHandlers] = useDisclosure(false);
@@ -22,11 +23,15 @@ function Home(): JSX.Element {
   const [isSignUpModalOpen, signUpModalHandlers] = useDisclosure(false);
   const [signUpErrors, setSignUpErrors] = useState<Partial<SignUpFields>>({});
 
+  const setUser = useStore((state) => state.setUser);
+
   async function signIn(values: SignInFields): Promise<void> {
     setSignInErrors({});
     const { data, status } = await api.post("session", values);
     if (status === 200) {
       signInModalHandlers.close();
+      const { user } = data as { user: User };
+      setUser(user);
     } else if (status === 401 || status === 422) {
       setSignInErrors(api.extractErrorMessages(data));
     }
@@ -37,6 +42,8 @@ function Home(): JSX.Element {
     const { data, status } = await api.post("user", values);
     if (status === 201) {
       signUpModalHandlers.close();
+      const { user } = data as { user: User };
+      setUser(user);
     } else if (status === 422) {
       setSignUpErrors(api.extractErrorMessages(data));
     }
