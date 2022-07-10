@@ -34,6 +34,7 @@ function SignUpModal(props: SignUpModalProps): JSX.Element {
         <TextInput
           label="Username"
           required
+          data-autofocus
           {...form.getInputProps("username")}
         />
         <PasswordInput

@@ -32,13 +32,12 @@ function SignInModal(props: SignInModalProps): JSX.Element {
         <TextInput
           label="Username"
           required
-          error={props.errors.username}
+          data-autofocus
           {...form.getInputProps("username")}
         />
         <PasswordInput
           label="Password"
           required
-          error={props.errors.password}
           {...form.getInputProps("password")}
         />
         <Group mt="md" position="right">
