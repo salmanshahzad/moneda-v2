@@ -30,6 +30,7 @@
     "@koa/router": "^11.0.1",
     "@mantine/core": "^4.2.12",
     "@mantine/form": "^4.2.12",
+    "@mantine/hooks": "^4.2.12",
     "argon2": "^0.28.7",
     "dotenv": "^16.0.1",
     "envalid": "^7.3.1",
@@ -43,6 +44,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "reflect-metadata": "^0.1.13",
+    "tabler-icons-react": "^1.53.0",
     "typeorm": "^0.3.7",
     "winston": "^3.8.1",
     "zustand": "^4.0.0-rc.2"

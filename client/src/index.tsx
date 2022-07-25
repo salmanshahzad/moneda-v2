@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import AuthGuard from "./components/auth/AuthGuard";
+import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import SignOut from "./pages/SignOut";
 
@@ -13,7 +14,9 @@ root.render(
       <Routes>
         <Route element={<AuthGuard />}>
           <Route path="/" element={<Home />} />
-          <Route path="/signout" element={<SignOut />} />
+          <Route element={<Layout />}>
+            <Route path="/signout" element={<SignOut />} />
+          </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
