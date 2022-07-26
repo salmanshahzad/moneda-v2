@@ -31,23 +31,27 @@ function Nav(): JSX.Element {
         {showMobileMenu && (
           <Menu
             opened={isMobileMenuOpen}
-            onClose={mobileMenuHandlers.close}
-            control={
+            onChange={mobileMenuHandlers.toggle}
+            shadow="md"
+            width={200}
+          >
+            <Menu.Target>
               <ActionIcon onClick={mobileMenuHandlers.toggle}>
                 <Menu2 />
               </ActionIcon>
-            }
-          >
-            {[...links, ...accountLinks].map((link) => (
-              <Menu.Item
-                key={link.href}
-                component={NavLink}
-                to={link.href}
-                icon={link.icon}
-              >
-                {link.label}
-              </Menu.Item>
-            ))}
+            </Menu.Target>
+            <Menu.Dropdown>
+              {[...links, ...accountLinks].map((link) => (
+                <Menu.Item
+                  key={link.href}
+                  component={NavLink}
+                  to={link.href}
+                  icon={link.icon}
+                >
+                  {link.label}
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
           </Menu>
         )}
         {!showMobileMenu && (
@@ -66,8 +70,11 @@ function Nav(): JSX.Element {
             ))}
             <Menu
               opened={isUserMenuOpen}
-              onClose={userMenuHandlers.close}
-              control={
+              onChange={userMenuHandlers.toggle}
+              shadow="md"
+              width={200}
+            >
+              <Menu.Target>
                 <Button
                   color="dark"
                   leftIcon={<User />}
@@ -76,18 +83,19 @@ function Nav(): JSX.Element {
                 >
                   Account
                 </Button>
-              }
-            >
-              {accountLinks.map((link) => (
-                <Menu.Item
-                  key={link.href}
-                  component={NavLink}
-                  to={link.href}
-                  icon={link.icon}
-                >
-                  {link.label}
-                </Menu.Item>
-              ))}
+              </Menu.Target>
+              <Menu.Dropdown>
+                {accountLinks.map((link) => (
+                  <Menu.Item
+                    key={link.href}
+                    component={NavLink}
+                    to={link.href}
+                    icon={link.icon}
+                  >
+                    {link.label}
+                  </Menu.Item>
+                ))}
+              </Menu.Dropdown>
             </Menu>
           </Group>
         )}

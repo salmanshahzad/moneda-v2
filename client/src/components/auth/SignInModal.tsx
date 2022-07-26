@@ -24,7 +24,7 @@ function SignInModal(props: SignInModalProps): JSX.Element {
 
   useEffect(() => {
     form.setErrors(props.errors);
-  }, [form, props.errors]);
+  }, [props.errors]);
 
   return (
     <Modal opened={props.isOpen} onClose={props.onClose} title="Sign In">

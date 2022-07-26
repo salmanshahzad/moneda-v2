@@ -26,7 +26,7 @@ function SignUpModal(props: SignUpModalProps): JSX.Element {
 
   useEffect(() => {
     form.setErrors(props.errors);
-  }, [form, props.errors]);
+  }, [props.errors]);
 
   return (
     <Modal opened={props.isOpen} onClose={props.onClose} title="Sign Up">
