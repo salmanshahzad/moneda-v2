@@ -1,9 +1,9 @@
 import Router from "@koa/router";
-import argon2 from "argon2";
 
 import logger from "../../config/logger";
 import User from "../models/user";
 import formatErrors from "../utils/formatErrors";
+import { createUser, getUser } from "../utils/user";
 import Joi from "../utils/Joi";
 
 const router = new Router({ prefix: "/user" });
@@ -15,7 +15,7 @@ router.get("/", async (ctx) => {
     return;
   }
 
-  const user = await User.findOneBy({ id: userId });
+  const user = await getUser({ id: userId });
   if (user) {
     ctx.body = { user };
   } else {
@@ -51,10 +51,7 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  const user = await User.create({
-    username,
-    password: await argon2.hash(password),
-  }).save();
+  const user = await createUser(username, password);
   logger.info(`Created user: ${username}`);
   ctx.status = 201;
   ctx.body = { user };

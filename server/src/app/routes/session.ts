@@ -1,8 +1,7 @@
 import Router from "@koa/router";
-import argon2 from "argon2";
 import formatErrors from "../utils/formatErrors";
 
-import User from "../models/user";
+import { getUser } from "../utils/user";
 import Joi from "../utils/Joi";
 
 const router = new Router({ prefix: "/session" });
@@ -33,20 +32,15 @@ router.post("/", async (ctx) => {
   };
 
   const { username, password } = value;
-  const user = await User.findOneBy({ username });
+  const user = await getUser({ username }, password);
   if (user === null) {
     ctx.status = 401;
     ctx.body = errorResponse;
     return;
   }
 
-  if (await argon2.verify(user.password, password)) {
-    ctx.body = { user };
-    ctx.session!["userId"] = user.id;
-  } else {
-    ctx.status = 401;
-    ctx.body = errorResponse;
-  }
+  ctx.body = { user };
+  ctx.session!["userId"] = user.id;
 });
 
 router.delete("/", (ctx) => {
