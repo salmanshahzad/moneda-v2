@@ -31,7 +31,7 @@ function Nav(): JSX.Element {
         {showMobileMenu && (
           <Menu
             opened={isMobileMenuOpen}
-            onChange={mobileMenuHandlers.toggle}
+            onClose={mobileMenuHandlers.close}
             shadow="md"
             width={200}
           >
@@ -70,7 +70,7 @@ function Nav(): JSX.Element {
             ))}
             <Menu
               opened={isUserMenuOpen}
-              onChange={userMenuHandlers.toggle}
+              onClose={userMenuHandlers.close}
               shadow="md"
               width={200}
             >
