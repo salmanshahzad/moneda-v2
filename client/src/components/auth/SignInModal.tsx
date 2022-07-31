@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export interface SignInModalProps {
   isOpen: boolean;
   onClose: () => void;
-  errors: Partial<SignInFields>;
+  errors: Partial<Record<keyof SignInFields, string>>;
   onSignIn: (values: SignInFields) => unknown;
 }
 

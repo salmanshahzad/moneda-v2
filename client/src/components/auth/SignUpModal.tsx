@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
-  errors: Partial<SignUpFields>;
+  errors: Partial<Record<keyof SignUpFields, string>>;
   onSignUp: (values: SignUpFields) => unknown;
 }
 
