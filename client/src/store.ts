@@ -8,7 +8,19 @@ export interface State {
 export interface User {
   id: number;
   username: string;
+  categories: Category[];
 }
+
+export interface Category {
+  id: number;
+  name: string;
+  type: CategoryType;
+  colour: string;
+  target: number;
+  amountForMonth: number;
+}
+
+export type CategoryType = "income" | "expense";
 
 const useStore = create<State>((set) => ({
   user: null,
