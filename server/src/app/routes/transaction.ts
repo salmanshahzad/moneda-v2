@@ -5,16 +5,11 @@ import Category from "../models/category";
 import Transaction from "../models/transaction";
 import formatErrors from "../utils/formatErrors";
 import Joi from "../utils/Joi";
+import { userAuth } from "../utils/user";
 
 const router = new Router({ prefix: "/transaction" });
 
-router.post("/", async (ctx) => {
-  const userId = ctx.session!["userId"];
-  if (typeof userId !== "number") {
-    ctx.status = 401;
-    return;
-  }
-
+router.post("/", userAuth, async (ctx) => {
   const schema = Joi.object({
     amount: Joi.number().min(0.01).required(),
     categoryId: Joi.number().integer().min(1).required(),
@@ -35,7 +30,10 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  const category = await Category.findOneBy({ id: value.categoryId, userId });
+  const category = await Category.findOneBy({
+    id: value.categoryId,
+    userId: ctx["user"].id,
+  });
   if (category === null) {
     ctx.status = 422;
     ctx.body = {
@@ -50,7 +48,7 @@ router.post("/", async (ctx) => {
     label: value.label,
     note: value.note,
     categoryId: value.categoryId,
-    userId,
+    userId: ctx["user"].id,
   }).save();
 
   ctx.status = 201;

@@ -1,10 +1,28 @@
+import { Middleware } from "@koa/router";
 import argon2 from "argon2";
 import type { FindOptionsWhere } from "typeorm";
 
 import db from "../../config/db";
+import logger from "../../config/logger";
 import Category from "../models/category";
 import Transaction from "../models/transaction";
 import User from "../models/user";
+
+export const userAuth: Middleware = async (ctx, next) => {
+  const userId = ctx.session!["userId"];
+  if (typeof userId === "number") {
+    const user = await User.findOneBy({ id: userId });
+    if (user) {
+      ctx["user"] = user;
+      await next();
+    } else {
+      logger.warn(`Session contains non-existant user id: ${userId}`);
+      ctx.status = 401;
+    }
+  } else {
+    ctx.status = 401;
+  }
+};
 
 export async function createUser(username: string, password: string) {
   return await db.transaction(async (entityManager) => {

@@ -3,19 +3,13 @@ import Router from "@koa/router";
 import logger from "../../config/logger";
 import User from "../models/user";
 import formatErrors from "../utils/formatErrors";
-import { createUser, getUser } from "../utils/user";
+import { createUser, getUser, userAuth } from "../utils/user";
 import Joi from "../utils/Joi";
 
 const router = new Router({ prefix: "/user" });
 
-router.get("/", async (ctx) => {
-  const userId = ctx.session!["userId"];
-  if (typeof userId !== "number") {
-    ctx.status = 401;
-    return;
-  }
-
-  const user = await getUser({ id: userId });
+router.get("/", userAuth, async (ctx) => {
+  const user = await getUser({ id: ctx["user"].id });
   if (user) {
     ctx.body = { user };
   } else {
