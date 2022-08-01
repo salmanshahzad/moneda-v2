@@ -6,6 +6,7 @@ import { createUser } from "./user";
 export interface TestUser {
   cookie: string[];
   user: Awaited<ReturnType<typeof createUser>>;
+  password: string;
 }
 
 async function createTestUser(): Promise<TestUser> {
@@ -21,6 +22,7 @@ async function createTestUser(): Promise<TestUser> {
   return {
     cookie: response.header["set-cookie"],
     user: response.body.user,
+    password,
   };
 }
 
