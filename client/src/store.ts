@@ -17,7 +17,6 @@ export interface Category {
   type: CategoryType;
   colour: string;
   target: number;
-  amountForMonth: number;
 }
 
 export type CategoryType = "income" | "expense";

@@ -32,7 +32,6 @@ describe("AddTransaction", () => {
         type: "expense" as const,
         colour: "",
         target: 0,
-        amountForMonth: 0,
       },
     ];
     const onAdd = jest.fn();

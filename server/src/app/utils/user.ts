@@ -19,7 +19,6 @@ export async function createUser(username: string, password: string) {
       type: "income" as const,
       colour: getRandomColour(),
       target: 0,
-      amountForMonth: 0,
       userId,
     }));
     const expenses = [
@@ -53,7 +52,6 @@ export async function createUser(username: string, password: string) {
       type: "expense" as const,
       colour: getRandomColour(),
       target: 0,
-      amountForMonth: 0,
       userId,
     }));
     const categories = [...income, ...expenses];

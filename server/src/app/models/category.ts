@@ -32,9 +32,6 @@ class Category extends BaseEntity {
   @Column({ type: "money", transformer: moneyTransformer })
   target!: number;
 
-  @Column({ type: "money", transformer: moneyTransformer })
-  amountForMonth!: number;
-
   @Column()
   @Index()
   userId!: number;
