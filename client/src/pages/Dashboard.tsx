@@ -1,6 +1,8 @@
 import { Grid } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { useState } from "react";
 
+import api from "../api";
 import AddTransaction, {
   type AddTransactionFields,
 } from "../components/transactions/AddTransaction";
@@ -9,9 +11,17 @@ import useStore from "../store";
 function Dashboard(): JSX.Element {
   const span = useMediaQuery("(min-width: 900px)") ? 6 : 12;
   const user = useStore((state) => state.user)!;
+  const [addTransactionErrors, setAddTransactionErrors] = useState<Partial<Record<keyof AddTransactionFields, string>>>({});
 
-  async function addTransaction(values: AddTransactionFields): Promise<void> {
-    console.log(values);
+  async function addTransaction(values: AddTransactionFields): Promise<boolean> {
+    setAddTransactionErrors({});
+    const { data, status } = await api.post("transaction", values);
+    if (status === 201) {
+      return true;
+    } else if (status === 422) {
+      setAddTransactionErrors(api.extractErrorMessages(data));
+    }
+    return false;
   }
 
   return (
@@ -28,7 +38,7 @@ function Dashboard(): JSX.Element {
       <Grid.Col span={span}>
         <AddTransaction
           categories={user.categories}
-          errors={{}}
+          errors={addTransactionErrors}
           onAdd={addTransaction}
         />
       </Grid.Col>

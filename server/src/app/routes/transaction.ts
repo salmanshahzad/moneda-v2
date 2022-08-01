@@ -20,8 +20,8 @@ router.post("/", userAuth, async (ctx) => {
         return helpers.error("date.base");
       })
       .required(),
-    label: Joi.string().default(""),
-    note: Joi.string().default(""),
+    label: Joi.string().allow("").default(""),
+    note: Joi.string().allow("").default(""),
   });
   const { error, value } = schema.validate(ctx.request.body);
   if (error) {

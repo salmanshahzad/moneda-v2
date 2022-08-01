@@ -19,7 +19,7 @@ import type { Category } from "../../store";
 export interface AddTransactionProps {
   categories: Category[];
   errors: Partial<Record<keyof AddTransactionFields, string>>;
-  onAdd: (values: AddTransactionFields) => unknown;
+  onAdd: (values: AddTransactionFields) => Promise<boolean>;
 }
 
 export interface AddTransactionFields {
@@ -60,10 +60,17 @@ function AddTransaction(props: AddTransactionProps): JSX.Element {
     form.setErrors(props.errors);
   }, [props.errors]);
 
+  async function onSubmit(values: AddTransactionFields): Promise<void> {
+    const success = await props.onAdd(values);
+    if (success) {
+      form.reset();
+    }
+  }
+
   return (
     <Paper p="md" shadow="md">
       <Text weight="bold">Add Transaction</Text>
-      <form onSubmit={form.onSubmit(props.onAdd)}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <NumberInput
           label="Amount"
           required

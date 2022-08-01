@@ -12,8 +12,9 @@ describe("AddTransaction", () => {
       label: "Label is invalid",
       note: "Note is invalid",
     };
+    const onAdd = async () => true;
 
-    render(<AddTransaction categories={[]} errors={errors} onAdd={() => {}} />);
+    render(<AddTransaction categories={[]} errors={errors} onAdd={onAdd} />);
 
     for (const error of Object.values(errors)) {
       expect(screen.getByText(error)).toBeInTheDocument();
@@ -64,7 +65,6 @@ describe("AddTransaction", () => {
         label,
         note,
       },
-      expect.anything()
     );
   });
 });
