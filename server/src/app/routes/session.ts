@@ -1,23 +1,17 @@
 import Router from "@koa/router";
-import formatErrors from "../utils/formatErrors";
 
-import { getUser } from "../utils/user";
 import Joi from "../utils/Joi";
+import validate from "../utils/validate";
+import { getUser } from "../utils/user";
 
 const router = new Router({ prefix: "/session" });
 
-router.post("/", async (ctx) => {
-  const schema = Joi.object({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-  });
-  const { error, value } = schema.validate(ctx.request.body);
-  if (error) {
-    ctx.status = 422;
-    ctx.body = { errors: formatErrors(error) };
-    return;
-  }
+const signInSchema = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+});
 
+router.post("/", validate(signInSchema), async (ctx) => {
   const errorResponse = {
     errors: [
       {
@@ -31,7 +25,7 @@ router.post("/", async (ctx) => {
     ],
   };
 
-  const { username, password } = value;
+  const { username, password } = ctx.request.body;
   const user = await getUser({ username }, password);
   if (user === null) {
     ctx.status = 401;

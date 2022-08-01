@@ -3,32 +3,28 @@ import dayjs from "dayjs";
 
 import Category from "../models/category";
 import Transaction from "../models/transaction";
-import formatErrors from "../utils/formatErrors";
+import validate from "../utils/validate";
 import Joi from "../utils/Joi";
 import { userAuth } from "../utils/user";
 
 const router = new Router({ prefix: "/transaction" });
 
-router.post("/", userAuth, async (ctx) => {
-  const schema = Joi.object({
-    amount: Joi.number().min(0.01).required(),
-    categoryId: Joi.number().integer().min(1).required(),
-    date: Joi.string()
-      .custom((value, helpers) => {
-        const date = dayjs(value, "YYYY-MM-DD");
-        if (date.isValid()) return date;
-        return helpers.error("date.base");
-      })
-      .required(),
-    label: Joi.string().allow("").default(""),
-    note: Joi.string().allow("").default(""),
-  });
-  const { error, value } = schema.validate(ctx.request.body);
-  if (error) {
-    ctx.status = 422;
-    ctx.body = { errors: formatErrors(error) };
-    return;
-  }
+const createSchema = Joi.object({
+  amount: Joi.number().min(0.01).required(),
+  categoryId: Joi.number().integer().min(1).required(),
+  date: Joi.string()
+    .custom((value, helpers) => {
+      const date = dayjs(value, "YYYY-MM-DD");
+      if (date.isValid()) return date;
+      return helpers.error("date.base");
+    })
+    .required(),
+  label: Joi.string().allow("").default(""),
+  note: Joi.string().allow("").default(""),
+});
+
+router.post("/", userAuth, validate(createSchema), async (ctx) => {
+  const { body: value } = ctx.request;
 
   const category = await Category.findOneBy({
     id: value.categoryId,
