@@ -10,11 +10,7 @@ const router = new Router({ prefix: "/user" });
 
 router.get("/", userAuth, async (ctx) => {
   const user = await getUser({ id: ctx["user"].id });
-  if (user) {
-    ctx.body = { user };
-  } else {
-    ctx.status = 401;
-  }
+  ctx.body = { user };
 });
 
 router.post("/", async (ctx) => {

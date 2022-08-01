@@ -3,24 +3,21 @@ import request from "supertest";
 import app from "../../config/app";
 import Transaction from "../models/transaction";
 import User from "../models/user";
-import { createUser } from "../utils/user";
+import createTestUser from "../utils/createTestUser";
 
 const ENDPOINT = "/api/transaction";
 
 describe("POST", () => {
-  const username = "transactiontest";
-  const password = "password";
-  const cookies: string[] = [];
-  const categories: { id: number }[] = [];
+  let username: string;
+  let categories: { id: number }[];
+  let cookies: string[];
 
   beforeAll(async () => {
-    await createUser(username, password);
-    const response = await request(app.callback()).post("/api/session").send({
-      username,
-      password,
-    });
-    cookies.push(...response.header["set-cookie"]);
-    categories.push(...response.body.user.categories);
+    const { cookie, user } = await createTestUser();
+    username = user.username;
+    // @ts-expect-error id is populated by TypeORM
+    categories = user.categories;
+    cookies = cookie;
   });
 
   it("returns 401 if a user is not signed in", async () => {
