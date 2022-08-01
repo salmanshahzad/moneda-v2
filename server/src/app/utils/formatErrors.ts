@@ -1,6 +1,7 @@
 import { ValidationError } from "joi";
 
 import logger from "../../config/logger";
+import capitalize from "../utils/capitalize";
 
 export interface Error {
   key: string;
@@ -39,7 +40,7 @@ function formatErrors({ details }: ValidationError): Error[] {
       message = "Passwords do not match";
     }
 
-    return { key, message };
+    return { key, message: capitalize(message) };
   });
 }
 

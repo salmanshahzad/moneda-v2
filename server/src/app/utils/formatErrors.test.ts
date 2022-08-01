@@ -10,7 +10,7 @@ describe("formatErrors", () => {
     const { error } = schema.validate({});
     const errors = formatErrors(error!);
     expect(errors[0]?.key).toBe("foo");
-    expect(errors[0]?.message).toBe("foo is required");
+    expect(errors[0]?.message).toBe("Foo is required");
   });
 
   it("formats errors for empty strings", () => {
@@ -21,7 +21,7 @@ describe("formatErrors", () => {
     const { error } = schema.validate({ foo: "" });
     const errors = formatErrors(error!);
     expect(errors[0]?.key).toBe("foo");
-    expect(errors[0]?.message).toBe("foo is required");
+    expect(errors[0]?.message).toBe("Foo is required");
   });
 
   it("formats errors for strings", () => {
@@ -32,7 +32,7 @@ describe("formatErrors", () => {
     const { error } = schema.validate({ foo: 1 });
     const errors = formatErrors(error!);
     expect(errors[0]?.key).toBe("foo");
-    expect(errors[0]?.message).toBe("foo must be a string");
+    expect(errors[0]?.message).toBe("Foo must be a string");
   });
 
   it("formats errors for integers", () => {
@@ -43,7 +43,7 @@ describe("formatErrors", () => {
     const { error } = schema.validate({ foo: 1.23 });
     const errors = formatErrors(error!);
     expect(errors[0]?.key).toBe("foo");
-    expect(errors[0]?.message).toBe("foo must be an integer");
+    expect(errors[0]?.message).toBe("Foo must be an integer");
   });
 
   it("formats errors for minimum values", () => {
@@ -54,7 +54,7 @@ describe("formatErrors", () => {
     const { error } = schema.validate({ foo: 0 });
     const errors = formatErrors(error!);
     expect(errors[0]?.key).toBe("foo");
-    expect(errors[0]?.message).toBe("foo must be at least 1");
+    expect(errors[0]?.message).toBe("Foo must be at least 1");
   });
 
   it("formats errors for dates", () => {
@@ -65,7 +65,7 @@ describe("formatErrors", () => {
     const { error } = schema.validate({ foo: "" });
     const errors = formatErrors(error!);
     expect(errors[0]?.key).toBe("foo");
-    expect(errors[0]?.message).toBe("foo must be a valid date (YYYY-MM-DD)");
+    expect(errors[0]?.message).toBe("Foo must be a valid date (YYYY-MM-DD)");
   });
 
   it("handles a special case for confirmPassword", () => {

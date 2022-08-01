@@ -22,11 +22,11 @@ router.post("/", async (ctx) => {
     errors: [
       {
         key: "username",
-        message: "username and/or password are incorrect",
+        message: "Username and/or password are incorrect",
       },
       {
         key: "password",
-        message: "username and/or password are incorrect",
+        message: "Username and/or password are incorrect",
       },
     ],
   };

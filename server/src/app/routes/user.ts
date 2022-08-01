@@ -34,7 +34,7 @@ router.post("/", async (ctx) => {
       errors: [
         {
           key: "username",
-          message: "username already exists",
+          message: "Username already exists",
         },
       ],
     };
