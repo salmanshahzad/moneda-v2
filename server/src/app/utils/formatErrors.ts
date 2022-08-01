@@ -22,6 +22,15 @@ function formatErrors({ details }: ValidationError): Error[] {
       case "string.base":
         message = `${key} must be a string`;
         break;
+      case "number.integer":
+        message = `${key} must be an integer`;
+        break;
+      case "number.min":
+        message = `${key} must be at least ${detail.context?.["limit"]}`;
+        break;
+      case "date.base":
+        message = `${key} must be a valid date (YYYY-MM-DD)`;
+        break;
       default:
         logger.warn(`Unhandled error type: ${detail.type}`);
     }

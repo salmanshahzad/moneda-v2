@@ -35,6 +35,39 @@ describe("formatErrors", () => {
     expect(errors[0]?.message).toBe("foo must be a string");
   });
 
+  it("formats errors for integers", () => {
+    const schema = Joi.object({
+      foo: Joi.number().integer().required(),
+    });
+
+    const { error } = schema.validate({ foo: 1.23 });
+    const errors = formatErrors(error!);
+    expect(errors[0]?.key).toBe("foo");
+    expect(errors[0]?.message).toBe("foo must be an integer");
+  });
+
+  it("formats errors for minimum values", () => {
+    const schema = Joi.object({
+      foo: Joi.number().min(1).required(),
+    });
+
+    const { error } = schema.validate({ foo: 0 });
+    const errors = formatErrors(error!);
+    expect(errors[0]?.key).toBe("foo");
+    expect(errors[0]?.message).toBe("foo must be at least 1");
+  });
+
+  it("formats errors for dates", () => {
+    const schema = Joi.object({
+      foo: Joi.date().required(),
+    });
+
+    const { error } = schema.validate({ foo: "" });
+    const errors = formatErrors(error!);
+    expect(errors[0]?.key).toBe("foo");
+    expect(errors[0]?.message).toBe("foo must be a valid date (YYYY-MM-DD)");
+  });
+
   it("handles a special case for confirmPassword", () => {
     const schema = Joi.object({
       password: Joi.string().required(),

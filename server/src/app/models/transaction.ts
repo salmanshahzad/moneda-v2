@@ -26,8 +26,8 @@ class Transaction extends BaseEntity {
   })
   amount!: number;
 
-  @Column()
-  title!: string;
+  @Column({ default: "" })
+  label!: string;
 
   @Column({ default: "" })
   note!: string;
