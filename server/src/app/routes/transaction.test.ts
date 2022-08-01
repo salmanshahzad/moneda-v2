@@ -1,6 +1,7 @@
 import request from "supertest";
 
 import app from "../../config/app";
+import type Category from "../models/category";
 import Transaction from "../models/transaction";
 import User from "../models/user";
 import createTestUser from "../utils/createTestUser";
@@ -9,13 +10,12 @@ const ENDPOINT = "/api/transaction";
 
 describe("POST", () => {
   let username: string;
-  let categories: { id: number }[];
+  let categories: Category[];
   let cookies: string[];
 
   beforeAll(async () => {
     const { cookie, user } = await createTestUser();
     username = user.username;
-    // @ts-expect-error id is populated by TypeORM
     categories = user.categories;
     cookies = cookie;
   });

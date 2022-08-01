@@ -42,14 +42,14 @@ router.post("/", userAuth, async (ctx) => {
     return;
   }
 
-  const transaction = await Transaction.create({
+  const transaction = await Transaction.save({
     amount: value.amount,
     date: value.date,
     label: value.label,
     note: value.note,
     categoryId: value.categoryId,
     userId: ctx["user"].id,
-  }).save();
+  });
 
   ctx.status = 201;
   ctx.body = { transaction };

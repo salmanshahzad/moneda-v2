@@ -11,10 +11,10 @@ describe("POST", () => {
   const password = "password";
 
   beforeAll(async () => {
-    await User.create({
+    await User.save({
       username,
       password: await argon2.hash(password),
-    }).save();
+    });
   });
 
   it("returns 422 if the credentials are not sent", async () => {

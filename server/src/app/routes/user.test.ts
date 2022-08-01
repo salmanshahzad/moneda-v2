@@ -51,10 +51,10 @@ describe("POST", () => {
     const username = "usertest";
     const password = "password";
 
-    await User.create({
+    await User.save({
       username,
       password,
-    }).save();
+    });
 
     const response = await request(app.callback()).post(ENDPOINT).send({
       username,

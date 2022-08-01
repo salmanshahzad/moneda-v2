@@ -26,18 +26,17 @@ export const userAuth: Middleware = async (ctx, next) => {
 
 export async function createUser(username: string, password: string) {
   return await db.transaction(async (entityManager) => {
-    const userInsertResult = await entityManager.insert(User, {
+    const user = await entityManager.save(User, {
       username,
       password: await argon2.hash(password),
     });
-    const userId: number = userInsertResult.raw[0].id;
 
     const income = ["Primary Income"].map((name) => ({
       name,
       type: "income" as const,
       colour: getRandomColour(),
       target: 0,
-      userId,
+      userId: user.id,
     }));
     const expenses = [
       "Car maintenance",
@@ -70,13 +69,15 @@ export async function createUser(username: string, password: string) {
       type: "expense" as const,
       colour: getRandomColour(),
       target: 0,
-      userId,
+      userId: user.id,
     }));
-    const categories = [...income, ...expenses];
-    await entityManager.insert(Category, categories);
+    const categories = await entityManager.save(Category, [
+      ...income,
+      ...expenses,
+    ]);
 
     return {
-      id: userId,
+      id: user.id,
       username,
       categories,
     };
