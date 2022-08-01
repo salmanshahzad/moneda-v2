@@ -32,6 +32,7 @@
     "@mantine/dates": "^5.0.2",
     "@mantine/form": "^5.0.2",
     "@mantine/hooks": "^5.0.2",
+    "@mantine/notifications": "^5.0.2",
     "argon2": "^0.28.7",
     "dayjs": "^1.11.4",
     "dotenv": "^16.0.1",
