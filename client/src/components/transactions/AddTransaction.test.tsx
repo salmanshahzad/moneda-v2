@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import AddTransaction from "./AddTransaction";
+import { clearInput, typeInput } from "../../utils/inputTest";
 
 describe("AddTransaction", () => {
   it("displays errors", () => {
@@ -41,30 +42,19 @@ describe("AddTransaction", () => {
       <AddTransaction categories={categories} errors={{}} onAdd={onAdd} />
     );
 
-    const amountInputId = screen.getByText("Amount").getAttribute("for");
-    const amountInput = document.getElementById(amountInputId!);
-    await userEvent.clear(amountInput!);
-    await userEvent.type(amountInput!, amount.toString());
-
-    const labelInputId = screen.getByText("Label").getAttribute("for");
-    const labelInput = document.getElementById(labelInputId!);
-    await userEvent.type(labelInput!, label);
-
-    const noteInputId = screen.getByText("Note").getAttribute("for");
-    const noteInput = document.getElementById(noteInputId!);
-    await userEvent.type(noteInput!, note);
-
+    await clearInput("Amount");
+    await typeInput("Amount", amount.toString());
+    await typeInput("Label", label);
+    await typeInput("Note", note);
     const addButton = screen.getByRole("button", { name: "Add" });
     await userEvent.click(addButton);
 
-    expect(onAdd).toHaveBeenCalledWith(
-      {
-        amount,
-        categoryId: categories[0]!.id.toString(),
-        date: expect.any(Date),
-        label,
-        note,
-      },
-    );
+    expect(onAdd).toHaveBeenCalledWith({
+      amount,
+      categoryId: categories[0]!.id.toString(),
+      date: expect.any(Date),
+      label,
+      note,
+    });
   });
 });

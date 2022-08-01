@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import SignInModal from "./SignInModal";
+import { typeInput } from "../../utils/inputTest";
 
 describe("SignInModal", () => {
   it("displays errors", () => {
@@ -38,14 +39,8 @@ describe("SignInModal", () => {
       />
     );
 
-    const usernameInputId = screen.getByText("Username").getAttribute("for");
-    const usernameInput = document.getElementById(usernameInputId!);
-    await userEvent.type(usernameInput!, username);
-
-    const passwordInputId = screen.getByText("Password").getAttribute("for");
-    const passwordInput = document.getElementById(passwordInputId!);
-    await userEvent.type(passwordInput!, password);
-
+    await typeInput("Username", username);
+    await typeInput("Password", password);
     const signInButton = screen.getAllByText("Sign In")[1];
     await userEvent.click(signInButton!);
 
