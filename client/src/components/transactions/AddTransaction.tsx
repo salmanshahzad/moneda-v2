@@ -1,11 +1,7 @@
 import {
-  Button,
-  Group,
   NumberInput,
-  Paper,
   Select,
   type SelectItem,
-  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
@@ -13,6 +9,9 @@ import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 import { CurrencyDollar } from "tabler-icons-react";
+
+import Block from "../ui/Block";
+import SubmitButton from "../ui/SubmitButton";
 
 import type { Category } from "../../store";
 
@@ -68,8 +67,7 @@ function AddTransaction(props: AddTransactionProps): JSX.Element {
   }
 
   return (
-    <Paper p="md" shadow="md">
-      <Text weight="bold">Add Transaction</Text>
+    <Block title="Add Transaction">
       <form onSubmit={form.onSubmit(onSubmit)}>
         <NumberInput
           label="Amount"
@@ -94,11 +92,9 @@ function AddTransaction(props: AddTransactionProps): JSX.Element {
         />
         <TextInput label="Label" {...form.getInputProps("label")} />
         <Textarea label="Note" {...form.getInputProps("note")} />
-        <Group mt="md" position="right">
-          <Button type="submit">Add</Button>
-        </Group>
+        <SubmitButton text="Add" />
       </form>
-    </Paper>
+    </Block>
   );
 }
 

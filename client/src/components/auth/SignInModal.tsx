@@ -1,6 +1,8 @@
-import { Button, Group, Modal, PasswordInput, TextInput } from "@mantine/core";
+import { Modal, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
+
+import SubmitButton from "../ui/SubmitButton";
 
 export interface SignInModalProps {
   isOpen: boolean;
@@ -40,9 +42,7 @@ function SignInModal(props: SignInModalProps): JSX.Element {
           required
           {...form.getInputProps("password")}
         />
-        <Group mt="md" position="right">
-          <Button type="submit">Sign In</Button>
-        </Group>
+        <SubmitButton text="Sign In" />
       </form>
     </Modal>
   );
