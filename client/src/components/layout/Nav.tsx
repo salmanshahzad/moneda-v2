@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Logout,
   Menu2,
+  Settings,
   User,
 } from "tabler-icons-react";
 
@@ -13,6 +14,7 @@ function Nav(): JSX.Element {
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
   ];
   const accountLinks = [
+    { href: "/settings", label: "Settings", icon: <Settings /> },
     { href: "/signout", label: "Sign Out", icon: <Logout /> },
   ];
 

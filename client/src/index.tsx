@@ -7,6 +7,7 @@ import AuthGuard from "./components/auth/AuthGuard";
 import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import Settings from "./pages/Settings";
 import SignOut from "./pages/SignOut";
 
 const root = createRoot(document.getElementById("root")!);
@@ -19,6 +20,7 @@ root.render(
             <Route path="/" element={<Home />} />
             <Route element={<Layout />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="/signout" element={<SignOut />} />
             </Route>
           </Route>
