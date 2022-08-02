@@ -14,6 +14,7 @@ import ChangeUsername, {
 import DeleteUser, {
   DeleteUserFields,
 } from "../components/settings/DeleteUser";
+import DarkThemeToggle from "../components/settings/DarkThemeToggle";
 import useStore from "../store";
 
 function Settings(): JSX.Element {
@@ -91,6 +92,9 @@ function Settings(): JSX.Element {
           errors={changePasswordErrors}
           onChange={changePassword}
         />
+      </Grid.Col>
+      <Grid.Col span={span}>
+        <DarkThemeToggle />
       </Grid.Col>
       <Grid.Col span={span}>
         <DeleteUser errors={deleteUserErrors} onDelete={deleteUser} />

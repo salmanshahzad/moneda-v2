@@ -1,4 +1,13 @@
-import { ActionIcon, Button, Group, Image, Menu, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  ButtonVariant,
+  Group,
+  Image,
+  Menu,
+  Title,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -18,10 +27,21 @@ function Nav(): JSX.Element {
     { href: "/signout", label: "Sign Out", icon: <Logout /> },
   ];
 
+  const { colorScheme } = useMantineColorScheme();
   const [isUserMenuOpen, userMenuHandlers] = useDisclosure(false);
   const [isMobileMenuOpen, mobileMenuHandlers] = useDisclosure(false);
   const showMobileMenu = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
+
+  function getVariant(href: string): ButtonVariant {
+    const isActive = location.pathname === href;
+    switch (colorScheme) {
+      case "light":
+        return isActive ? "filled" : "subtle";
+      case "dark":
+        return isActive ? "white" : "subtle";
+    }
+  }
 
   return (
     <Group position="apart" p="xs" style={{ boxShadow: "0 5px 10px gray" }}>
@@ -65,7 +85,7 @@ function Nav(): JSX.Element {
                 to={link.href}
                 color="dark"
                 leftIcon={link.icon}
-                variant={location.pathname === link.href ? "filled" : "subtle"}
+                variant={getVariant(link.href)}
               >
                 {link.label}
               </Button>
