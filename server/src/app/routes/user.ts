@@ -104,6 +104,7 @@ router.delete(
   async (ctx) => {
     await User.delete({ id: ctx["user"].id });
     ctx.status = 204;
+    ctx.session = null;
   }
 );
 
