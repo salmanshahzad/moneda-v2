@@ -120,6 +120,7 @@ export async function getUser(
   return {
     id: user.id,
     username: user.username,
+    isTwoFactorEnabled: user.isTwoFactorEnabled,
     categories,
     recentTransactions,
   };

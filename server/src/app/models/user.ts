@@ -22,6 +22,12 @@ class User extends BaseEntity {
   @Column()
   password!: string;
 
+  @Column({ default: false })
+  isTwoFactorEnabled!: boolean;
+
+  @Column({ nullable: true, type: "varchar" })
+  twoFactorSecret?: string | null;
+
   @OneToMany(() => Category, (category) => category.user)
   categories!: Category[];
 
