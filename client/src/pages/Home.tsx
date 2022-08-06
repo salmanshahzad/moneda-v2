@@ -15,11 +15,22 @@ import { useState } from "react";
 import api from "../api";
 import SignInModal, { SignInFields } from "../components/auth/SignInModal";
 import SignUpModal, { SignUpFields } from "../components/auth/SignUpModal";
+import TwoFactorModal, {
+  TwoFactorFields,
+} from "../components/auth/TwoFactorModal";
 import useStore, { User } from "../store";
 
 function Home(): JSX.Element {
   const [isSignInModalOpen, signInModalHandlers] = useDisclosure(false);
   const [signInErrors, setSignInErrors] = useState<Partial<SignInFields>>({});
+  const [credentials, setCredentials] = useState<SignInFields>({
+    username: "",
+    password: "",
+  });
+  const [isTwoFactorModalOpen, twoFactorModalHandlers] = useDisclosure(false);
+  const [twoFactorErrors, setTwoFactorErrors] = useState<
+    Partial<TwoFactorFields>
+  >({});
   const [isSignUpModalOpen, signUpModalHandlers] = useDisclosure(false);
   const [signUpErrors, setSignUpErrors] = useState<Partial<SignUpFields>>({});
 
@@ -31,9 +42,29 @@ function Home(): JSX.Element {
     if (status === 200) {
       signInModalHandlers.close();
       const { user } = data as { user: User };
-      setUser(user);
+      if (user.isTwoFactorEnabled) {
+        twoFactorModalHandlers.open();
+        setCredentials(values);
+      } else {
+        setUser(user);
+      }
     } else if (status === 401 || status === 422) {
       setSignInErrors(api.extractErrorMessages(data));
+    }
+  }
+
+  async function onVerifyTwoFactor(values: TwoFactorFields): Promise<void> {
+    setTwoFactorErrors({});
+    const { data, status } = await api.post("session", {
+      ...credentials,
+      ...values,
+    });
+    if (status === 200) {
+      twoFactorModalHandlers.close();
+      const { user } = data as { user: User };
+      setUser(user);
+    } else if (status === 401) {
+      setTwoFactorErrors(api.extractErrorMessages(data));
     }
   }
 
@@ -94,6 +125,12 @@ function Home(): JSX.Element {
         onClose={signInModalHandlers.close}
         errors={signInErrors}
         onSignIn={signIn}
+      />
+      <TwoFactorModal
+        isOpen={isTwoFactorModalOpen}
+        onClose={twoFactorModalHandlers.close}
+        errors={twoFactorErrors}
+        onVerify={onVerifyTwoFactor}
       />
       <SignUpModal
         isOpen={isSignUpModalOpen}

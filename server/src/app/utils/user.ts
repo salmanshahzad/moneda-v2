@@ -121,6 +121,8 @@ export async function getUser(
     id: user.id,
     username: user.username,
     isTwoFactorEnabled: user.isTwoFactorEnabled,
+    twoFactorSecret:
+      typeof password !== "undefined" ? user.twoFactorSecret : "",
     categories,
     recentTransactions,
   };

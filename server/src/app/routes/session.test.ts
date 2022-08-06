@@ -1,4 +1,5 @@
 import argon2 from "argon2";
+import * as twoFactor from "node-2fa";
 import request from "supertest";
 
 import app from "../../config/app";
@@ -46,6 +47,50 @@ describe("POST", () => {
       username,
       password,
     });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["set-cookie"]).toBeDefined();
+    expect(response.body.user).toBeDefined();
+  });
+
+  it("returns isTwoFactorEnabled if a token is not sent", async () => {
+    await User.update({ username }, { isTwoFactorEnabled: true });
+
+    const response = await request(app.callback()).post(ENDPOINT).send({
+      username,
+      password,
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["set-cookie"]).not.toBeDefined();
+    expect(response.body.user).toEqual({ isTwoFactorEnabled: true });
+  });
+
+  it("returns 401 if the 2FA token is invalid", async () => {
+    jest
+      .spyOn(twoFactor, "verifyToken")
+      .mockImplementationOnce(() => ({ delta: -1 }));
+
+    const response = await request(app.callback()).post(ENDPOINT).send({
+      username,
+      password,
+      token: "token",
+    });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.errors).toBeDefined();
+  });
+
+  it("returns 200 if the 2FA token is valid", async () => {
+    jest
+      .spyOn(twoFactor, "verifyToken")
+      .mockImplementationOnce(() => ({ delta: 0 }));
+
+    const response = await request(app.callback()).post(ENDPOINT).send({
+      username,
+      password,
+      token: "token",
+    });
+
     expect(response.statusCode).toBe(200);
     expect(response.headers["set-cookie"]).toBeDefined();
     expect(response.body.user).toBeDefined();
