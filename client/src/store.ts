@@ -9,6 +9,7 @@ export interface User {
   id: number;
   username: string;
   categories: Category[];
+  isTwoFactorEnabled: boolean;
 }
 
 export interface Category {

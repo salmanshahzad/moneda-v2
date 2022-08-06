@@ -1,7 +1,7 @@
 import { Grid } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check } from "tabler-icons-react";
 
 import api from "../api";
@@ -15,6 +15,9 @@ import DeleteUser, {
   DeleteUserFields,
 } from "../components/settings/DeleteUser";
 import DarkThemeToggle from "../components/settings/DarkThemeToggle";
+import TwoFactorToggle, {
+  TwoFactorToggleFields,
+} from "../components/settings/TwoFactorToggle";
 import useStore from "../store";
 
 function Settings(): JSX.Element {
@@ -31,6 +34,19 @@ function Settings(): JSX.Element {
   const [deleteUserErrors, setDeleteUserErrors] = useState<
     Partial<Record<keyof DeleteUserFields, string>>
   >({});
+  const [twoFactorToggleErrors, setTwoFactorToggleErrors] = useState<
+    Partial<Record<keyof TwoFactorToggleFields, string>>
+  >({});
+  const [twoFactorQrCode, setTwoFactorQrCode] = useState("");
+
+  useEffect(() => {
+    api.post("two-factor").then(({ data, status }) => {
+      if (status === 200) {
+        const { qr } = data as { qr: string };
+        setTwoFactorQrCode(qr);
+      }
+    });
+  }, [setTwoFactorQrCode, user.isTwoFactorEnabled]);
 
   async function changeUsername(
     values: ChangeUsernameFields
@@ -79,6 +95,28 @@ function Settings(): JSX.Element {
     }
   }
 
+  async function enableTwoFactor(
+    values: TwoFactorToggleFields
+  ): Promise<boolean> {
+    setTwoFactorToggleErrors({});
+    const { data, status } = await api.post("two-factor/verify", values);
+    if (status === 204) {
+      setUser({ ...user, isTwoFactorEnabled: true });
+      return true;
+    } else {
+      setTwoFactorToggleErrors(api.extractErrorMessages(data));
+    }
+    return false;
+  }
+
+  async function disableTwoFactor(): Promise<void> {
+    setTwoFactorToggleErrors({});
+    const { status } = await api.delete("two-factor");
+    if (status === 204) {
+      setUser({ ...user, isTwoFactorEnabled: false });
+    }
+  }
+
   return (
     <>
       <Grid.Col span={span}>
@@ -95,6 +133,15 @@ function Settings(): JSX.Element {
       </Grid.Col>
       <Grid.Col span={span}>
         <DarkThemeToggle />
+      </Grid.Col>
+      <Grid.Col span={span}>
+        <TwoFactorToggle
+          errors={twoFactorToggleErrors}
+          isEnabled={user.isTwoFactorEnabled}
+          qrCode={twoFactorQrCode}
+          onEnable={enableTwoFactor}
+          onDisable={disableTwoFactor}
+        />
       </Grid.Col>
       <Grid.Col span={span}>
         <DeleteUser errors={deleteUserErrors} onDelete={deleteUser} />
